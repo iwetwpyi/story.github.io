@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>구름과 민들레 애니메이션</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 구름 애니메이션 */
+        .cloud1 {
+            animation: moveLeftRight 6s infinite alternate;
+            left: 5%;
+            width: auto;
+            height: 20%;
+            position: absolute;
+            bottom: 3%;
+            opacity: 0.6;
+            z-index: 1;
+        }
+
+        .cloud2 {
+            animation: moveRightLeft 6s infinite alternate;
+            right: 30%;
+            width: auto;
+            height: 20%;
+            position: absolute;
+            bottom: 10%;
+            opacity: 0.6;
+            z-index: 1;
+        } 
+        .cloud3 {
+            animation: moveSideToSide 6s infinite alternate; /* 좌우 애니메이션 추가 */
+            width: auto;
+            height: 20%;
+            position: absolute;
+            right: 5%;
+            top: 20%;
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        /* 민들레 애니메이션 */
+        .dandelion {
+            position: absolute;
+            width: 150px;
+            height: auto;
+            opacity: 0.7;
+            animation: floatUp 10s infinite linear;
+            visibility: hidden;
+            bottom: 0%;
+        }
+
+        .show {
+            visibility: visible;
+        }
+
+        .right, .home {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .right {
+            right: 10px;
+            top: 45%;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+        }
+
+        /* 구름 왼쪽에서 오른쪽으로 움직임 */
+        @keyframes moveLeftRight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(500px); }
+        }
+
+        /* 구름 오른쪽에서 왼쪽으로 움직임 */
+        @keyframes moveRightLeft {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(450px); }
+        }
+
+        /* 클라우드3 양쪽으로 움직임 */
+        @keyframes moveSideToSide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-500px); } /* 원하는 이동 거리 설정 */
+        }
+
+        /* 민들레 대각선으로 위로 상승 */
+        @keyframes floatUp {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-200px, -100vh) rotate(15deg); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <!-- 구름 이미지들 -->
+    <img src="9구름1.png" class="cloud1">
+    <img src="9구름2.png" class="cloud2">
+    <img src="9구름3.png" class="cloud3">
+
+    <!-- 민들레 이미지들 -->
+    <img src="9＿민들레1.png" class="dandelion dandelion1" alt="민들레">
+    <img src="9＿민들레２.png" class="dandelion dandelion2" alt="민들레">
+    <img src="9＿민들레3.png" class="dandelion dandelion3" alt="민들레">
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+   
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "10.html";
+        };
+
+        // 각 민들레 이미지가 나타나는 순서 설정
+        function showDandelions() {
+            const dandelion1 = document.querySelector('.dandelion1');
+            const dandelion2 = document.querySelector('.dandelion2');
+            const dandelion3 = document.querySelector('.dandelion3');
+
+            // 첫 번째 민들레 표시 후 사라짐
+            dandelion1.classList.add('show');
+            setTimeout(() => {
+                dandelion1.classList.remove('show');
+                dandelion2.classList.add('show'); // 두 번째 민들레 표시
+            }, 2000); // 3초 후 전환
+
+            // 두 번째 민들레 표시 후 사라짐
+            setTimeout(() => {
+                dandelion2.classList.remove('show');
+                dandelion3.classList.add('show'); // 세 번째 민들레 표시
+            }, 4000); // 추가 3초 후 전환
+        }
+
+        // 페이지 로딩 후 애니메이션 시작
+        window.onload = function() {
+            showDandelions();
+            
+            // 5초 후 자동으로 10.html로 이동
+            setTimeout(() => {
+                window.location.href = "10.html";
+            }, 5000); // 5초 후 페이지 이동
+        };
+    </script>
+
+</body>
+</html>

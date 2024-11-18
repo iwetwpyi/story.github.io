@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            background-color: #f0f0f0;
+            background-image: url("10_1_배경.png");
+            user-select: none;
+        }
+
+        .right, .home {
+            width: 80px; /* 가로 크기 지정 */
+            height: auto; /* 비율 유지 */
+            position: absolute; /* 절대 위치 지정 */
+            user-select: none;
+            cursor: pointer; /* 손가락 모양 커서 */
+            transition: transform 0.3s ease; /* 돋보기 효과 전환 */
+            display: none; /* 초기에는 보이지 않도록 설정 */
+        }
+
+        .right {
+            right: 10px; /* 오른쪽 버튼 위치 */
+            top: 45%; /* 세로 중앙 위치 */
+        }
+
+        .home {
+            left: 10px; /* 홈 버튼 위치 */
+            top: 10px; /* 상단에서 10px 위치 */
+        }
+
+        /* 마우스를 올렸을 때 확대 효과 */
+        .home:hover, .right:hover {
+            transform: scale(1.2); /* 확대 비율 조정 */
+        }
+
+        .img1 {
+            width: 200px;
+            height: auto;
+            position: absolute;
+            top: 10%; /* 초기 위치 설정 */
+            transition: top 1s; /* 하단으로 떨어지는 애니메이션 추가 */
+        }
+
+        .eagle {
+            width: 1000px;
+            height: auto;
+            position: absolute;
+            animation: moveEagle 5s linear infinite; /* 애니메이션 추가 */
+            cursor: pointer; /* eagle 위에 마우스 커서가 포인터로 변하도록 설정 */
+        }
+
+        @keyframes moveEagle {
+            0% {
+                left: 0;
+            }
+            50% {
+                left: calc(100% - 1000px); /* 화면의 오른쪽 끝까지 이동 */
+            }
+            100% {
+                left: 0; /* 다시 왼쪽으로 이동 */
+            }
+        }
+
+        .floating {
+            animation: float 3s forwards; /* 중앙으로 떠오르는 애니메이션 추가 */
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0); /* 원래 위치 */
+            }
+            100% {
+                transform: translateY(-20vh); /* 화면 중앙으로 이동 */
+            }
+        }
+    </style>
+</head>
+<body id="background">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <img src="10_1_독수리.png" class="eagle" id="eagle">
+    <img src="10_1_민들레.png" class="img1" id="img1">
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "11.html";
+        };
+
+        const img1 = document.getElementById("img1");
+        const eagle = document.getElementById("eagle");
+        const rightButton = document.getElementById("rightButton");
+        const initialImg1Top = img1.style.top; // img1의 초기 위치 저장
+        let isFloating = false; // 이미지를 떠오르게 한 상태를 추적
+
+        document.addEventListener("mousemove", (event) => {
+            // 이미지를 떠오르게 하지 않았다면 img1의 x 위치를 설정
+            if (!isFloating) {
+                const mouseX = event.clientX;
+                img1.style.left = `${mouseX - img1.width / 2}px`; // img1이 마우스를 따라 움직이도록
+            }
+        });
+
+        document.addEventListener("click", (event) => {
+            // 클릭된 위치의 x좌표
+            const clickX = event.clientX;
+
+            // img1이 하단으로 떨어지도록 설정
+            img1.style.top = "calc(100vh - 200px)"; // 화면 하단으로 이동 (200px은 img1의 높이)
+
+            // eagle의 중앙 x 좌표 계산
+            const eagleCenterX = eagle.offsetLeft + eagle.offsetWidth / 2;
+
+            // 클릭된 x 좌표와 eagle의 중앙 x 좌표가 같으면 img1을 중앙으로 이동
+            if (Math.abs(clickX - eagleCenterX) < 50) { // 허용 오차를 두어 비슷한 위치에서 반응
+                setTimeout(() => {
+                    img1.style.top = `58%`; // img1을 eagle 위로 이동
+                    img1.style.left = `40%`; // img1을 eagle 위로 이동
+                    img1.classList.add("floating"); // 중앙으로 떠오르도록 애니메이션 클래스 추가
+                    eagle.classList.add("floating"); // eagle도 중앙으로 떠오르도록 애니메이션 클래스 추가
+                    isFloating = true; // 이미지를 떠오르게 한 상태로 설정
+
+                    // 3초 후에 rightButton을 보이도록 설정
+                    setTimeout(() => {
+                        rightButton.style.display = 'block'; // rightButton 보이기
+                    }, 3000); // 3초 후
+                }, 1000); // 1초 후에 실행 (img1이 하단으로 떨어지는 시간)
+            } else {
+                // 클릭된 위치가 어긋났을 때 img1이 다시 처음 위치로 돌아가도록
+                setTimeout(() => {
+                    img1.style.top = initialImg1Top; // img1을 처음 위치로 복원
+                }, 1000); // 1초 후에 원래 위치로 돌아감
+            }
+        });
+    </script>
+</body>
+</html>

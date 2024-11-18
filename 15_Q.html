@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퍼즐 맞추기 게임</title>
+  <style>
+      @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+    /* 스타일링 */
+    body {
+        font-family: 'RixXladywatermelonR';
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      user-select: none; /* 기본 설정 */
+    }
+
+
+    .text-container {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 17px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            user-select: none;
+        }
+
+    .tooltip {
+            display: none;
+            position: absolute;
+            top: 140%;
+            left: 40%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'RixXladywatermelonR';
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .text-container:hover .tooltip {
+            display: block;
+        }
+
+        .home {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            cursor: pointer;
+            display: none;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+            display: block;
+        }
+
+       
+
+        /* 마우스를 올렸을 때 확대 효과 */
+        .home:hover {
+            transform: scale(1.2); /* 확대 비율 조정 */
+        }
+
+
+    .game-container {
+      text-align: center;
+    }
+
+    .puzzle-container {
+      display: grid;
+      grid-template-columns: repeat(3, 100px); /* 3x3 퍼즐 */
+      grid-template-rows: repeat(3, 100px);
+      gap: 5px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .puzzle-piece {
+      width: 100px;
+      height: 100px;
+      background-color: #ccc;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 5px;
+      position: relative;
+      user-select: none; /* 드래그 중 텍스트 선택 방지 */
+    }
+
+    button {
+        font-family: 'RixXladywatermelonR';
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 19px;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #finishBtn {
+      background-color: #007BFF; /* 다른 색상 */
+    }
+
+    #finishBtn:hover {
+      background-color: #0056b3; /* hover 색상 */
+    }
+  </style>
+</head>
+
+
+<body>
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+
+
+  <div class="game-container">
+    <h1>할 수 있어!</h1>
+    <div id="puzzle" class="puzzle-container"></div>
+    <button id="shuffleBtn">퍼즐 섞기</button>
+    <button id="finishBtn">퍼즐 완성</button> <!-- 퍼즐 완성 버튼 -->
+  </div>
+
+
+
+  <div class="text-container" onclick="goToNextScene()">
+    <div class="text" id="instructionText">?</div>
+    <div class="tooltip">네잎클로버를 완성해 홀씨를 응원해주자</div>
+</div>
+
+
+  <script>
+
+document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+
+    const puzzleContainer = document.getElementById("puzzle");
+    const shuffleButton = document.getElementById("shuffleBtn");
+    const finishButton = document.getElementById("finishBtn"); // 퍼즐 완성 버튼
+    const imageSrc = "15_Q_clover.jpg"; // 이미지 URL
+    const numRows = 3; // 퍼즐의 가로 크기
+    const numCols = 3; // 퍼즐의 세로 크기
+
+    let pieces = [];
+    let originalOrder = []; // 퍼즐의 원래 순서를 저장
+
+    // 이미지 조각을 만들어서 퍼즐에 넣기
+    function createPuzzlePieces() {
+      pieces = [];
+      originalOrder = [];
+      for (let i = 0; i < numRows * numCols; i++) {
+        const piece = document.createElement("div");
+        piece.classList.add("puzzle-piece");
+
+        const xPos = (i % numCols) * 100;
+        const yPos = Math.floor(i / numCols) * 100;
+
+        piece.style.backgroundImage = `url(${imageSrc})`;
+        piece.style.backgroundSize = `${numCols * 100}px ${numRows * 100}px`;
+        piece.style.backgroundPosition = `-${xPos}px -${yPos}px`;
+
+        piece.style.order = i;
+        piece.dataset.index = i;
+        piece.setAttribute("draggable", true); // 처음에는 드래그 가능
+        piece.addEventListener("dragstart", dragStart);
+        piece.addEventListener("dragover", dragOver);
+        piece.addEventListener("drop", dropPiece);
+        piece.addEventListener("dragenter", dragEnter);
+        piece.addEventListener("dragleave", dragLeave);
+
+        puzzleContainer.appendChild(piece);
+        pieces.push(piece);
+        originalOrder.push(i); // 원래 순서 저장
+      }
+
+      // 섞은 상태로 시작하기 위해 shuffle 호출
+      shufflePuzzle();
+    }
+
+    // 퍼즐 섞기
+    function shufflePuzzle() {
+      const shuffledOrder = [...originalOrder];
+      // 배열을 랜덤하게 섞기
+      for (let i = shuffledOrder.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledOrder[i], shuffledOrder[j]] = [shuffledOrder[j], shuffledOrder[i]];
+      }
+
+      // 섞인 순서대로 퍼즐 조각 배치
+      pieces.forEach((piece, index) => {
+        piece.style.order = shuffledOrder[index];
+      });
+    }
+
+    // 드래그 시작
+    function dragStart(e) {
+      e.dataTransfer.setData("text", e.target.dataset.index);
+    }
+
+    // 드래그 오버
+    function dragOver(e) {
+      e.preventDefault();
+    }
+
+    // 드래그 대상에 들어왔을 때
+    function dragEnter(e) {
+      e.target.style.backgroundColor = "#f0f0f0";
+    }
+
+    // 드래그 대상에서 나갈 때
+    function dragLeave(e) {
+      e.target.style.backgroundColor = "";
+    }
+
+    // 드래그 앤 드롭
+    function dropPiece(e) {
+      e.preventDefault();
+      const draggedIndex = e.dataTransfer.getData("text");
+      const draggedPiece = pieces[draggedIndex];
+      const targetPiece = e.target;
+
+      const draggedIndexPos = draggedPiece.style.order;
+      draggedPiece.style.order = targetPiece.style.order;
+      targetPiece.style.order = draggedIndexPos;
+
+      // 배경색 원래대로
+      targetPiece.style.backgroundColor = "";
+
+      // 퍼즐이 완성되면 아무 동작도 하지 않음
+      checkPuzzleCompletion();
+    }
+
+    // 퍼즐이 완성되었는지 확인
+    function checkPuzzleCompletion() {
+      const isComplete = pieces.every((piece, index) => parseInt(piece.style.order) === originalOrder[index]);
+      if (isComplete) {
+        // 퍼즐이 완성된 경우, 퍼즐 완성 버튼 클릭 시 16.html로 이동
+        finishButton.addEventListener("click", function() {
+          window.location.href = "16.html"; // 16.html로 이동
+        });
+      }
+    }
+
+    // 퍼즐 완성 버튼 클릭 시
+    finishButton.addEventListener("click", function() {
+      const isComplete = pieces.every((piece, index) => parseInt(piece.style.order) === originalOrder[index]);
+      if (!isComplete) {
+        alert("퍼즐을 맞춰줘!");
+      } else {
+        window.location.href = "16.html"; // 퍼즐이 완성되었으면 16.html로 이동
+      }
+    });
+
+    // 게임 시작 시 퍼즐 만들기
+    createPuzzlePieces();
+
+    // 셔플 버튼 클릭 시 섞기
+    shuffleButton.addEventListener("click", shufflePuzzle);
+  </script>
+</body>
+</html>

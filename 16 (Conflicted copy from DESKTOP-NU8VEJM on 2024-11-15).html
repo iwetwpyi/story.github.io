@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s, background-image 0.5s; /* 배경 전환에 애니메이션 적용 */
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; 
+            position: relative;
+            background-image: url("16_1.png"); /* 초기 배경 이미지 */
+        }
+
+        .container {
+            text-align: center;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .name {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #ffe058;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            margin-left: 0px;
+            padding: 10px;
+            width: 100px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #FFFAE4;
+            border-radius: 5px;
+            padding: 30px;
+            width: 500px;
+            margin-top: 5px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .next {
+            width: 30px;
+            height: auto;
+            margin-top: 5px;
+            user-select: none;
+            cursor: pointer;
+            opacity: 30%;
+        }
+
+        .left, .right, .home {
+            width: 80px; /* 가로 크기 지정 */
+            height: auto; /* 비율 유지 */
+            position: absolute; /* 절대 위치 지정 */
+            user-select: none;
+            cursor: pointer; /* 손가락 모양 커서 */
+            transition: transform 0.3s ease; /* 돋보기 효과 전환 */
+        }
+
+        .left {
+            left: 10px; /* 왼쪽 버튼 위치 */
+            top: 45%; /* 세로 중앙 위치 */
+        }
+
+        .right {
+            right: 10px; /* 오른쪽 버튼 위치 */
+            top: 45%; /* 세로 중앙 위치 */
+        }
+
+        .home {
+            left: 10px; /* 홈 버튼 위치 */
+            top: 10px; /* 상단에서 10px 위치 */
+        }
+        
+        /* 마우스를 올렸을 때 확대 효과 */
+        .home:hover, .right:hover, .left:hover {
+            transform: scale(1.2); /* 확대 비율 조정 */
+        }
+
+
+    </style>
+</head>
+<body id="background">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_왼.png" class="left" id="leftButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+    
+    <div class="container">
+        <div class="name" id="characterName">홀씨</div>
+        <div class="text" id="text-box">좋아! 그럼 나는 다시 바람을 타야겠어!</div>
+        <img src="말풍선_세모.png" class="next" onclick="changeText()">
+    </div>
+
+
+
+    <script>
+    document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("leftButton").onclick = function() {
+            window.location.href = "15.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "17.html";
+        };
+        // 텍스트와 배경 이미지를 함께 저장
+        const texts = [
+            { character: "홀씨", text: "좋아! 그럼 나는 다시 바람을 타야겠어!", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_1.png')" },
+            { character: "들꽃들", text: "어엉?", textBackground: "#FFFAE4", nameBackground: "#D087F7", backgroundImage: "url('16_2.png')" },
+            { character: "홀씨", text: "나는 그냥 홀씨로 살래", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_3.png')" },
+            { character: "홀씨", text: "잡초도, 약초도 아닌 나 그대로!", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_3.png')" },
+            { character: "민들레꽃들", text: "샛노란 꽃을 피우고 싶지 않아?", textBackground: "#FFFAE4", nameBackground: "#E5F246", backgroundImage: "url('16_2.png')" },
+            { character: "홀씨", text: "뭐, 지금 이대로 하얀 솜털도 예쁘잖아", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_3.png')" },
+            { character: "홀씨", text: "나는 꽃이 되는 대신, 씨앗으로 남을래", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_2.png')" },
+            { character: "홀씨", text: "언제든 다시 시작할 수 있는 씨앗으로", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_2.png')" },
+            { character: "생쥐", text: "그래. 소망을 간직한 씨앗...", textBackground: "#FFFAE4", nameBackground: "#C4C4C4", backgroundImage: "url('16_4.png')" },
+
+            { character: "민들레꽃들", text: "그럼 이제 어디로 갈 건데?", textBackground: "#FFFAE4", nameBackground: "#E5F246", backgroundImage: "url('16_5.png')" },
+            { character: "들꽃들", text: "숲? 바다? 강가?", textBackground: "#FFFAE4", nameBackground: "#D087F7", backgroundImage: "url('16_6.png')" },
+            { character: "홀씨", text: "숲! 나는 아주 울창한 숲의 일부가 될 거야", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('16_7.png')" },
+            { character: "생쥐", text: "더 넓은 세상이 쉽지는 않을거다", textBackground: "#FFFAE4", nameBackground: "#C4C4C4", backgroundImage: "url('16_4.png')" },
+            { character: "생쥐", text: "그래도... 너라면 해낼 수 있을지도...", textBackground: "#FFFAE4", nameBackground: "#C4C4C4", backgroundImage: "url('16_4.png')" },
+
+            { character: "들꽃들", text: "어? 까마귀다! 다들 피해!", textBackground: "#FFFAE4", nameBackground: "#D087F7", backgroundImage: "url('15=6_2.png')" },
+            { character: "홀씨", text: "까마귀야! 나 좀 도와줘-!", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('15_7.png')" },
+            { character: "까마귀", text: "내가 가는 곳은 아주 험하고 추워", textBackground: "#FFFAE4", nameBackground: "#555555", backgroundImage: "url('15_7.png')" },
+            { character: "홀씨", text: "괜찮아! 나는 어디서든 잘 자라니까!", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('15_7.png')" }
+
+
+        
+
+        ];
+
+        let currentIndex = 0;
+        function changeText() {
+    currentIndex++;
+    if (currentIndex < texts.length) {
+        document.getElementById('text-box').innerText = texts[currentIndex].text;
+        document.getElementById('characterName').innerText = texts[currentIndex].character;
+        document.getElementById('characterName').style.backgroundColor = texts[currentIndex].nameBackground;
+        document.getElementById('text-box').style.backgroundColor = texts[currentIndex].textBackground;
+
+        // 배경 이미지 변경
+        document.getElementById('background').style.backgroundImage = texts[currentIndex].backgroundImage;
+    } else {
+        // 마지막 텍스트 이후 8-2-Q1.html로 이동
+        window.location.href = "17.html";
+    }
+}
+
+    </script>
+
+</body>
+</html>

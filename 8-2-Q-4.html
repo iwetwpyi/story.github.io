@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-image: url("꽃잎.png");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            position: relative;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 17px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            user-select: none;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 140%;
+            left: 40%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'RixXladywatermelonR';
+            white-space: nowrap;
+        }
+
+        .text-container:hover .tooltip {
+            display: block;
+        }
+
+        .home, .right {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            cursor: pointer;
+            display: none; /* 오른쪽 버튼은 초기에는 숨김 */
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+            display: block;
+        }
+
+        .right {
+            right: 10px;
+        }
+
+        .falling-petal {
+            position: absolute;
+            top: 0;
+            width: 30px;
+            height: auto;
+            cursor: pointer; /* 커서가 포인터로 나타나도록 설정 */
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="text-container" onclick="goToNextScene()">
+        <div class="text" id="instructionText">?</div>
+        <div class="tooltip">떨어지는 꽃잎을 잡아보자</div>
+    </div>
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <script>
+
+        
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "8-2-Q-5.html";
+        };
+
+
+          let petalCount = 0; // 현재 떨어진 꽃잎 수
+        const petalDuration = 10; // 애니메이션 지속 시간 (초)
+
+        function createFallingPetal() {
+            const petal = document.createElement('img');
+            petal.src = '내리는 꽃잎.png'; // 꽃잎 이미지 경로
+            petal.classList.add('falling-petal');
+            petal.style.left = Math.random() * 100 + 'vw'; // 랜덤한 x 위치
+            const fallDuration = 3 + Math.random() * 5; // 3초에서 8초 사이의 랜덤 속도
+            petal.style.animation = `fall ${fallDuration}s linear`; // 애니메이션 설정
+            document.body.appendChild(petal);
+            petalCount++; // 떨어진 꽃잎 수 증가
+
+            // 꽃잎 클릭 시 제거
+            petal.addEventListener('click', () => {
+                petal.remove();
+                petalCount--; // 클릭으로 제거할 때 카운트 감소
+            });
+
+            // 애니메이션이 끝나면 꽃잎 제거
+            petal.addEventListener('animationend', () => {
+                petal.remove();
+            });
+        }
+
+        // 꽃잎 생성 주기 설정
+        const petalInterval = setInterval(createFallingPetal, 1000); // 1초마다 꽃잎 생성
+
+        // 10초 후에 애니메이션 종료
+        setTimeout(() => {
+            clearInterval(petalInterval); // 꽃잎 생성 종료
+            document.getElementById("rightButton").style.display = "block"; // 오른쪽 버튼 표시
+        }, petalDuration * 1000); // 10초 후
+
+    </script>
+</body>
+</html>

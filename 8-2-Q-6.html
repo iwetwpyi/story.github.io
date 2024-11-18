@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s, background-image 0.5s;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; 
+            position: relative;
+            background-image: url("어떻게.png"); /* 초기 배경 이미지 */
+        }
+
+        .container {
+            text-align: center;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .name {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #ffe058;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            margin-left: 0px;
+            padding: 10px;
+            width: 100px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #FFFAE4;
+            border-radius: 5px;
+            padding: 30px;
+            width: 500px;
+            margin-top: 5px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .next {
+            width: 30px;
+            height: auto;
+            margin-top: 5px;
+            user-select: none;
+            cursor: pointer;
+            opacity: 30%;
+        }
+
+        .left, .right, .home {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .left {
+            left: 10px;
+            top: 45%;
+        }
+
+        .right {
+            right: 10px;
+            top: 45%;
+            display: none; /* 처음에는 오른쪽 버튼을 숨김 */
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+        }
+        
+        .home:hover, .right:hover, .left:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body id="background">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_왼.png" class="left" id="leftButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <div class="container" id="textContainer">
+        <div class="name" id="characterName">홀씨</div>
+        <div class="text" id="text-box">어떻게 하지?</div>
+        <img src="말풍선_세모.png" class="next" id="nextButton">
+    </div>
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+        document.getElementById("leftButton").onclick = function() {
+            window.location.href = "8-2-Q-5.html";
+        };
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "8-2-Q-7.html";  // 오른쪽 버튼 클릭 시 페이지 이동
+        };
+
+        const texts = [   
+            { character: "홀씨", text: "어떻게 하지?", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('어떻게.png')" },
+            { character: "홀씨", text: "...", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('웃는소리.png')" },
+            { character: "홀씨", text: "저 비눗방울을 타고 가볼까?", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('타고가볼까.png')" }
+        ];
+
+        let currentIndex = 0;
+
+        function changeText() {
+            currentIndex++;
+            if (currentIndex < texts.length) {
+                const currentText = texts[currentIndex];
+                document.getElementById('text-box').innerText = currentText.text;
+                document.getElementById('characterName').innerText = currentText.character;
+                document.getElementById('characterName').style.backgroundColor = currentText.nameBackground;
+                document.getElementById('text-box').style.backgroundColor = currentText.textBackground;
+                document.getElementById('background').style.backgroundImage = currentText.backgroundImage;
+            } else {
+                // 마지막 텍스트일 때 오른쪽 버튼을 보이게 함
+                document.getElementById('rightButton').style.display = 'block';
+                // 마지막 대사 후, 세모 아이콘 클릭 시 페이지 이동
+                document.getElementById('nextButton').onclick = function() {
+                    window.location.href = "8-2-Q-7.html";  // 마지막 대사 이후 세모 클릭 시 이동
+                };
+            }
+        }
+
+        // 세모 아이콘 클릭 시 다음 텍스트로 변경
+        document.getElementById('nextButton').onclick = function() {
+            changeText();
+            if (currentIndex === texts.length - 1) {
+                document.getElementById('rightButton').style.display = 'block'; // 마지막 텍스트에 도달하면 오른쪽 버튼 보이기
+            }
+        };
+
+    </script>
+
+</body>
+</html>

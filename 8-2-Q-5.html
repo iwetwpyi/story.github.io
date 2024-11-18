@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s, background-image 0.5s;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; 
+            position: relative;
+            background-image: url("꽃잎은 오래.png"); /* 초기 배경 이미지 */
+        }
+
+        .container {
+            text-align: center;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .name {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #ffe058;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            margin-left: 0px;
+            padding: 10px;
+            width: 100px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #FFFAE4;
+            border-radius: 5px;
+            padding: 30px;
+            width: 500px;
+            margin-top: 5px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .next {
+            width: 30px;
+            height: auto;
+            margin-top: 5px;
+            user-select: none;
+            cursor: pointer;
+            opacity: 30%;
+        }
+
+        .right, .home {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .right {
+            right: 10px;
+            top: 45%;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+        }
+        
+        .home:hover, .right:hover {
+            transform: scale(1.2);
+        }
+
+        /* 날아가기 버튼 스타일 */
+        .fly-button {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color:rgba(0, 0, 0, 0.8);
+            color: white;
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .fly-button:hover {
+            background-color: rgba(85, 85, 85, 0.8);
+        }
+
+    </style>
+</head>
+<body id="background">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <div class="container" id="textContainer">
+        <div class="name" id="characterName">홀씨</div>
+        <div class="text" id="text-box">꽃잎은 오래 떠있지 못하는구나...</div>
+        <img src="말풍선_세모.png" class="next" onclick="changeText()">
+    </div>
+
+    <button class="fly-button" id="flyButton" onclick="flyAway()">날아가기</button>
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+   
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "8-2-Q-6.html";
+        };
+
+        const texts = [   
+            { character: "홀씨", text: "꽃잎은 오래 떠있지 못하는구나...", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('꽃잎은 오래.png')" },
+            { character: "", text: "", textBackground: "", nameBackground: "", backgroundImage: "url('8-날아가기.png')", hideElements: true },
+            { character: "홀씨", text: "아무래도 이 방법은 안 되겠어", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('8-날아가기.png')" }
+        ];
+
+        let currentIndex = 0;
+
+        function changeText() {
+            currentIndex++;
+            if (currentIndex < texts.length) {
+                const currentText = texts[currentIndex];
+                if (currentText.hideElements) {
+                    document.getElementById('textContainer').style.display = 'none';
+                    document.getElementById('flyButton').style.display = 'block';
+                } else {
+                    document.getElementById('text-box').innerText = currentText.text;
+                    document.getElementById('characterName').innerText = currentText.character;
+                    document.getElementById('characterName').style.backgroundColor = currentText.nameBackground;
+                    document.getElementById('text-box').style.backgroundColor = currentText.textBackground;
+                    document.getElementById('background').style.backgroundImage = currentText.backgroundImage;
+
+                    // "꽃잎은 오래 떠있지 못하는구나..."일 때 세모 클릭 시 페이지 이동
+                    if (currentText.text === "꽃잎은 오래 떠있지 못하는구나...") {
+                        document.querySelector(".next").onclick = function() {
+                            window.location.href = "8-2-Q-6.html";
+                        };
+                    }
+                }
+            }
+        }
+
+        function flyAway() {
+            // 날아가기 버튼 클릭 시 텍스트와 배경을 원래 상태로 복원
+            document.getElementById('flyButton').style.display = 'none';
+            document.getElementById('textContainer').style.display = 'block';
+
+            // "꽃잎이 너무 빨리 떨어져..." 텍스트로 변경
+            const currentText = texts[2]; // '꽃잎이 너무 빨리 떨어져...' 텍스트
+            document.getElementById('text-box').innerText = currentText.text;
+            document.getElementById('characterName').innerText = currentText.character;
+            document.getElementById('characterName').style.backgroundColor = currentText.nameBackground;
+            document.getElementById('text-box').style.backgroundColor = currentText.textBackground;
+            document.getElementById('background').style.backgroundImage = currentText.backgroundImage;
+        }
+    </script>
+
+</body>
+</html>

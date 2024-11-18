@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s, background-image 0.5s;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; 
+            position: relative;
+            background-image: url("8-2-Q-3배경.png"); /* 초기 배경 이미지 */
+        }
+
+        .container {
+            text-align: center;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .name {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #ffe058;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            margin-left: 0px;
+            padding: 10px;
+            width: 100px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #FFFAE4;
+            border-radius: 5px;
+            padding: 30px;
+            width: 500px;
+            margin-top: 5px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .next {
+            width: 30px;
+            height: auto;
+            margin-top: 5px;
+            user-select: none;
+            cursor: pointer;
+            opacity: 30%;
+        }
+
+        .left, .home {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .left {
+            left: 10px;
+            top: 45%;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+        }
+        
+        .home:hover, .left:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body id="background">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_왼.png" class="left" id="leftButton">
+
+    <div class="container" id="textContainer">
+        <div class="name" id="characterName">홀씨</div>
+        <div class="text" id="text-box">그럼 떨어지는 꽃잎을 타고 갈까?</div>
+        <img src="말풍선_세모.png" class="next" onclick="goToNext()">
+    </div>
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+        document.getElementById("leftButton").onclick = function() {
+            window.location.href = "8-2-Q-2.html";
+        };
+
+        function goToNext() {
+            window.location.href = "8-2-Q-4.html"; // 두 번째 HTML 파일로 이동
+        }
+    </script>
+
+</body>
+</html>

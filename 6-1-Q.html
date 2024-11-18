@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-image: url("여기야.png");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            position: relative;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 17px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            user-select: none;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 140%;
+            left: 40%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'RixXladywatermelonR';
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .text-container:hover .tooltip {
+            display: block;
+        }
+
+        .home, .right {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            cursor: pointer;
+            display: none;
+            transition: transform 0.3s ease; /* 돋보기 효과 전환 */
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+            display: block;
+        }
+
+        .right {
+            right: 10px;
+        }
+
+        
+        /* 마우스를 올렸을 때 확대 효과 */
+        .home:hover, .right:hover {
+            transform: scale(1.2); /* 확대 비율 조정 */
+        }
+
+
+        .leaf {
+            width: 50px;
+            height: auto;
+            top: 65%;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s ease;
+            transform-origin: center bottom;
+        }
+
+        .draggable {
+            width: 100px;
+            height: auto;
+            position: absolute;
+            display: none;
+            pointer-events: none;
+        }
+
+        .magnifier {
+            position: absolute;
+            bottom: 5%;
+            left: 70%;
+            width: 80px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <img src="미니 풀잎.png" class="leaf" id="leafImage">
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+    
+    <!-- 커서로 변하는 돋보기 이미지 -->
+    <img src="돋보기.png" class="draggable" id="draggableImage">
+    
+    <!-- 하단의 돋보기 아이콘 -->
+    <img src="돋보기.png" class="magnifier" id="magnifierIcon">
+
+    <div class="text-container" onclick="goToNextScene()">
+        <div class="text" id="instructionText">?</div>
+        <div class="tooltip">돋보기로 새싹을 찾아보자</div>
+    </div>
+
+    <script>
+        let isMagnifierActive = false; // 돋보기가 활성화 상태인지 여부
+
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "6-2.html";
+        };
+
+        const leafImage = document.getElementById("leafImage");
+        const draggableImage = document.getElementById("draggableImage");
+        const magnifierIcon = document.getElementById("magnifierIcon");
+        const rightButton = document.getElementById("rightButton");
+
+        // 돋보기 아이콘 클릭 시 커서로 변경
+        magnifierIcon.addEventListener("click", () => {
+            isMagnifierActive = true;
+            draggableImage.style.display = "block"; // 커서용 돋보기 이미지 표시
+            document.body.style.cursor = "none"; // 기본 커서를 숨김
+        });
+
+        // 마우스 이동 시 커서가 돋보기 이미지로 따라옴
+        document.addEventListener("mousemove", (event) => {
+            if (isMagnifierActive) {
+                draggableImage.style.left = `${event.pageX - 25}px`;
+                draggableImage.style.top = `${event.pageY - 25}px`;
+            }
+        });
+
+        // 돋보기 커서가 leaf 이미지 위에 있을 때 leaf 확대
+        document.addEventListener("mousemove", (event) => {
+            if (isMagnifierActive) {
+                const rect = leafImage.getBoundingClientRect();
+                if (
+                    event.clientX > rect.left &&
+                    event.clientX < rect.right &&
+                    event.clientY > rect.top &&
+                    event.clientY < rect.bottom
+                ) {
+                    leafImage.style.transform = "translate(-50%, -50%) scale(5.0)";
+                } else {
+                    leafImage.style.transform = "translate(-50%, -50%) scale(1)";
+                }
+            }
+        });
+
+        // leaf 이미지 클릭 시 기본 커서로 전환하고 rightButton 표시
+        leafImage.addEventListener("click", () => {
+            if (isMagnifierActive) {
+                isMagnifierActive = false;
+                draggableImage.style.display = "none"; // 돋보기 이미지 숨기기
+                document.body.style.cursor = "default"; // 기본 커서로 변경
+                rightButton.style.display = "block"; // rightButton 표시
+                leafImage.style.transform = "translate(-50%, -50%) scale(1)"; // 원래 크기로 되돌림
+            }
+        });
+    </script>
+</body>
+</html>

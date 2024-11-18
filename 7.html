@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-image: url("7_민들레.png");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            position: relative;
+        }
+
+        .home, .right, .left {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+        }
+
+        .right {
+            right: 10px;
+        }
+
+        .left {
+            left: 10px;
+        }
+
+        .home:hover, .right:hover, .left:hover {
+            transform: scale(1.2);
+        }
+
+        .butterfly {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            top: 20%;
+            left: 30%;
+            pointer-events: none; /* 두더지 클릭 전까지 클릭 비활성화 */
+            cursor: pointer;
+        }
+
+        .mole {
+            width: 130px;
+            height: auto;
+            position: absolute;
+            top: 56%;
+            left: 15%;
+            cursor: pointer;
+        }
+
+        .sprout {
+            width: 75px;
+            height: auto;
+            position: absolute;
+            top: 60%;
+            left: 80%;
+        }
+
+        /* 말풍선 모달 스타일 */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            font-family: 'RixXladywatermelonR';
+        }
+
+        .next {
+            width: 30px;
+            height: auto;
+            user-select: none;
+            cursor: pointer;
+            opacity: 50%;
+        }
+
+        /* 하단 텍스트 스타일 */
+        .footer-text {
+            display: none;
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'RixXladywatermelonR';
+            font-size: 18px;
+            color: white;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+ /* 새 모달 스타일 */
+ .new-modal {
+
+            display: none;
+            position: absolute;
+            top: 70%;
+            left: 80%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 200px;
+            text-align: center;
+            font-family: 'RixXladywatermelonR';
+        }
+
+        
+        .text-container {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 17px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            user-select: none;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 140%;
+            left: 40%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'RixXladywatermelonR';
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        .text-container:hover .tooltip {
+            display: block;
+        }
+        
+
+    </style>
+</head>
+
+<body>
+
+    <img src="7_나비.png" class="butterfly" onclick="showButterflyModal()">
+    <img src="7_두더지.png" class="mole" onclick="showModal()">
+    <img src="7_새싹.png" class="sprout" onclick="showLeafModal()">
+    
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_왼.png" class="left" id="leftButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <div class="modal" id="modal">
+        <span id="modalText">곧 비가 올 것 같아</span>
+        <img src="세모아이콘.png" class="next" onclick="toggleModalText()">
+    </div>
+    
+    <div class="footer-text" id="footerText">비가 오면 날아갈 수가 없는데...</div>
+    <div class="new-modal" id="newModal" onclick="updateFooterText()">
+        <span id="newModalText">우와, 멋지다! <br>난 혼자는 무서운데...</span>
+        <img src="세모아이콘.png" class="next" onclick="toggleModalText()">
+    </div>
+    
+    <div class="text-container" onclick="goToNextScene()">
+        <div class="text" id="instructionText">?</div>
+        <div class="tooltip">다들 할 말이 있는 것 같은데.<br>두더지를 먼저 클릭해보자</div>
+    </div>
+    
+    
+    <script>
+  function updateFooterText() {
+    const footerText = document.getElementById("footerText");
+    footerText.innerText = "흠... 원한다면 너도 데려가 줄게"; // 하단 텍스트 변경
+    footerText.style.display = "block"; // 하단 텍스트 보이기
+    document.getElementById("newModal").style.display = "none"; // 새 모달 닫기
+
+    // 클릭 이벤트 리스너 추가
+    footerText.onclick = function() {
+        if (this.innerText === "흠... 원한다면 너도 데려가 줄게") {
+            this.style.display = "none"; // footerText 숨기기
+            document.getElementById("newModalText").innerHTML = "고맙지만, 괜찮아!<br> 나는 여기에 뿌리를 내릴거야"; // newModalText 변경
+            document.getElementById("newModal").style.display = "block"; // newModal 표시
+        }
+    };
+
+    // 새 모달 클릭 시 하단 텍스트 변경
+    document.getElementById("newModal").onclick = function() {
+        footerText.innerText = "왜?"; // 하단 텍스트를 "왜?"로 변경
+        footerText.style.display = "block"; // 하단 텍스트 보이기
+        document.getElementById("newModal").style.display = "none"; // 새 모달 닫기
+
+        // 하단 텍스트 클릭 시 newModalText를 "나는 커다란 나무가 될 거거든"으로 변경하고 다시 표시
+        footerText.onclick = function() {
+            this.style.display = "none"; // footerText 숨기기
+            document.getElementById("newModalText").innerHTML = "나는 커다란 <br>나무가 될 거거든"; // newModalText 변경
+            document.getElementById("newModal").style.display = "block"; // newModal 다시 표시
+            
+            // "나는 커다란 나무가 될 거거든" 모달 클릭 시
+            document.getElementById("newModal").onclick = function() {
+                document.getElementById("newModal").style.display = "none"; // newModal 닫기
+                footerText.style.display = "none"; // 하단 텍스트 숨기기
+
+            };
+        };
+    };
+}
+
+
+
+        
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("leftButton").onclick = function() {
+            window.location.href = "6-2.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "8.html";
+        };
+
+        let moleClicked = false;
+        let isFirstText = true;
+
+        function showModal() {
+            if (document.getElementById("modal").style.display === "block") return; // 모달이 이미 열려 있으면 중복 실행 방지
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("modalText").innerText = "곧 비가 올 것 같아";
+            document.getElementById("footerText").style.display = "none";
+            moleClicked = true;
+            document.querySelector('.butterfly').style.pointerEvents = 'none'; // 나비 클릭 비활성화
+            document.querySelector('.mole').style.pointerEvents = 'none'; // 두더지 클릭 비활성화
+        }
+
+        function showButterflyModal() {
+            if (!moleClicked || document.getElementById("modal").style.display === "block") return; // 두더지를 클릭하지 않았거나 모달이 이미 열려 있으면 실행 금지
+
+            document.getElementById("modal").style.display = "block";
+            document.getElementById("modalText").innerText = "내가 옮겨준다니까";
+            document.getElementById("modal").style.top = "15%";
+            document.getElementById("footerText").style.display = "none";
+            moleClicked = false;
+            document.querySelector('.butterfly').style.pointerEvents = 'none'; // 나비 클릭 비활성화
+            document.querySelector('.mole').style.pointerEvents = 'none'; // 두더지 클릭 활성화
+        }
+
+        function toggleModalText() {
+            if (isFirstText) {
+                document.getElementById("modalText").innerText = "흙이 축축해";
+                isFirstText = false;
+            } else {
+                closeModal();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+            if (moleClicked) {
+                document.getElementById("footerText").innerText = "비가 오면 날아갈 수가 없는데...";
+                document.getElementById("footerText").style.display = "block";
+            } else {
+                document.getElementById("footerText").innerText = "나는 바람을 타고 날거야";
+                document.getElementById("footerText").style.display = "block";
+            }
+        }
+
+        document.getElementById("footerText").onclick = function() {
+            if (this.innerText === "비가 오면 날아갈 수가 없는데...") {
+                showButterflyModal(); // 나비 모달 열기
+            } else if (this.innerText === "나는 바람을 타고 날거야") {
+                this.innerText = "아주 멀리!";
+            } else if (this.innerText === "아주 멀리!") {
+                // 나비 모달을 "나도 멀리 날 수 있어" 텍스트로 표시
+                document.getElementById("modal").style.display = "block";
+                document.getElementById("modalText").innerText = "나도 멀리 날 수 있어";
+                document.getElementById("modal").style.top = "15%"; // 모달 위치 조정
+                this.style.display = "none"; // 하단 텍스트 숨김
+
+                // 나비 모달 클릭 시 하단 텍스트 변경
+                document.getElementById("modal").onclick = function() {
+                    closeModal(); // 모달 닫기
+                    document.getElementById("footerText").innerText = "다른 도움 없이 스스로 해낼거야"; // 하단 텍스트 변경
+                    document.getElementById("footerText").style.display = "block"; // 하단 텍스트 보이기
+                };
+
+
+        // 스스로 해낼거야 텍스트 박스를 클릭하면
+        document.getElementById("footerText").onclick = function() {
+            if (this.innerText === "다른 도움 없이 스스로 해낼거야") {
+                this.style.display = "none"; // 하단 텍스트 숨김
+                document.getElementById("newModal").style.display = "block"; // 새 모달 열기
+                // 새 모달 위치 조정
+                document.getElementById("newModal").style.top = "40%"; // 새로운 모달 위치 조정
+            }
+        };
+            }
+        };
+
+        
+    </script>
+</body>
+</html>
+
+    </script>
+</body>
+</html>

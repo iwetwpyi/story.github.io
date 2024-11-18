@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            position: relative;
+            user-select: none;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            background-color: #f0f0f0;
+            transition: background-color 0.5s, background-image 0.5s; /* 배경 전환에 애니메이션 적용 */
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh; 
+            position: relative;
+            background-image: url("12_Q1.png"); /* 초기 배경 이미지 */
+        }
+
+        .container {
+            text-align: center;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            user-select: none;
+        }
+
+        .name {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #ffe058;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            margin-left: 0px;
+            padding: 10px;
+            width: 100px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            background-color: #FFFAE4;
+            border-radius: 5px;
+            padding: 30px;
+            width: 500px;
+            margin-top: 5px;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        .next {
+            width: 30px;
+            height: auto;
+            margin-top: 5px;
+            user-select: none;
+            cursor: pointer;
+            opacity: 30%;
+        }
+
+        .left, .right, .home {
+            width: 80px; /* 가로 크기 지정 */
+            height: auto; /* 비율 유지 */
+            position: absolute; /* 절대 위치 지정 */
+            user-select: none;
+            cursor: pointer; /* 손가락 모양 커서 */
+            transition: transform 0.3s ease; /* 돋보기 효과 전환 */
+        }
+
+        .left {
+            left: 10px; /* 왼쪽 버튼 위치 */
+            top: 45%; /* 세로 중앙 위치 */
+        }
+
+        .right {
+            right: 10px; /* 오른쪽 버튼 위치 */
+            top: 45%; /* 세로 중앙 위치 */
+        }
+
+        .home {
+            left: 10px; /* 홈 버튼 위치 */
+            top: 10px; /* 상단에서 10px 위치 */
+        }
+        
+        /* 마우스를 올렸을 때 확대 효과 */
+        .home:hover, .right:hover, .left:hover {
+            transform: scale(1.2); /* 확대 비율 조정 */
+        }
+
+
+    </style>
+</head>
+<body id="background">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_왼.png" class="left" id="leftButton">
+    
+    <div class="container">
+        <div class="name" id="characterName">홀씨</div>
+        <div class="text" id="text-box">매달렸다!</div>
+        <img src="말풍선_세모.png" class="next" onclick="changeText()">
+    </div>
+
+
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+        document.getElementById("leftButton").onclick = function() {
+            window.location.href = "12.html";
+        };
+
+        // 텍스트와 배경 이미지를 함께 저장
+        const texts = [
+            { character: "홀씨", text: "매달렸다!", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('12_Q1.png')" },
+            { character: "홀씨", text: "그런데 너무 흔들려서 어지러워...!", textBackground: "#FFFAE4", nameBackground: "#ffe058", backgroundImage: "url('12_Q2.png')" }
+        ];
+
+        let currentIndex = 0;
+        function changeText() {
+    currentIndex++;
+    if (currentIndex < texts.length) {
+        document.getElementById('text-box').innerText = texts[currentIndex].text;
+        document.getElementById('characterName').innerText = texts[currentIndex].character;
+        document.getElementById('characterName').style.backgroundColor = texts[currentIndex].nameBackground;
+        document.getElementById('text-box').style.backgroundColor = texts[currentIndex].textBackground;
+
+        // 배경 이미지 변경
+        document.getElementById('background').style.backgroundImage = texts[currentIndex].backgroundImage;
+    } else {
+        // 마지막 텍스트 이후 8-2-Q1.html로 이동
+        window.location.href = "13.html";
+    }
+}
+
+    </script>
+
+</body>
+</html>
