@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-image: url("비내리는 배경.png");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            position: relative;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 17px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            user-select: none;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 340%;
+            left: 40%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'RixXladywatermelonR';
+            white-space: nowrap;
+        }
+
+        .text-container:hover .tooltip {
+            display: block;
+        }
+
+        .home, .right {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            cursor: pointer;
+            display: none;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+            display: block;
+        }
+
+        .right {
+            right: 10px;
+        }
+
+        /* 마우스를 올렸을 때 확대 효과 */
+        .home:hover, .right:hover {
+            transform: scale(1.2); /* 확대 비율 조정 */
+        }
+
+        .magnifier {
+            position: absolute;
+            bottom: 5%;
+            left: 70%;
+            width: 80px;
+            cursor: pointer;
+        }
+
+        .img1 {
+            width: 80vh;
+            height: auto;
+            top: 5%;
+            left: 7%;
+            position: absolute;
+        }
+        .img2 {
+            width: 95vh;
+            height: auto;
+            top: 6%;
+            left: 45%;
+            position: absolute;
+        }
+
+        .img3 {
+            width: 90px;
+            height: auto;
+            top: 14%;
+            left: 53%;
+        }
+        .img4 {
+            width: 60px;
+            height: auto;
+            top: 12%;
+            left: 75%;
+        }
+        .img5 {
+            width: 200px;
+            height: auto;
+            top: 12%;
+            left: 22%;
+        } 
+        .img6 {
+            width: 100px;
+            height: auto;
+            top: 13%;
+            left: 13%;
+        }
+
+        /* img3, img4, img5, img6을 반투명하게 설정 및 클릭 가능하게 조정 */
+.img3, .img4, .img5, .img6 {
+    opacity: 0.1; /* 실루엣 효과 */
+    z-index: 3; /* img1, img2보다 위에 위치 */
+    pointer-events: auto; /* 클릭 가능하도록 설정 */
+    cursor: pointer;
+    position: absolute;
+}
+
+/* img1과 img2는 하위에 위치 */
+.img1, .img2 {
+    z-index: 2;
+    pointer-events: none; /* img1과 img2가 클릭을 차단하지 않도록 설정 */
+}
+
+
+    </style>
+</head>
+<body>
+
+
+    <div class="text-container" onclick="goToNextScene()">
+        <div class="text" id="instructionText">?</div>
+        <div class="tooltip">구름에 가려진 해를 찾아보자</div>
+    </div>
+
+    <img src="구름_오.png" class="img2" id="imgImage">
+    <img src="구름_왼.png" class="img1" id="imgImage">
+
+    <img src="8_풍선.png" class="img3" id="imgImage">
+    <img src="8_태양.png" class="img4" id="imgImage">
+    <img src="8_비행기.png" class="img5" id="imgImage">
+    <img src="8_달.png" class="img6" id="imgImage">
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "8-2-Q-2.html";
+        };
+
+
+// 각 이미지 클릭 시 가려져 있던 이미지가 보이도록 설정
+document.querySelectorAll(".img3, .img4, .img5, .img6").forEach(img => {
+    img.addEventListener("click", () => {
+        img.style.opacity = "1"; // 클릭 시 이미지 불투명하게
+
+        // img4 클릭 시 rightButton 표시
+        if (img.classList.contains("img4")) {
+            document.getElementById("rightButton").style.display = "block";
+        }
+    });
+});
+
+
+
+    </script>
+</body>
+</html>
