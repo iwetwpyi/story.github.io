@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'RixXladywatermelonR';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-4@1.0/RixXladywatermelonR.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        body {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            background-image: url("8-Q-7.png");
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            position: relative;
+        }
+
+        .text-container {
+            position: absolute;
+            top: 5%;
+            right: 10%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 17px;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .text {
+            font-family: 'RixXladywatermelonR';
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            user-select: none;
+        }
+
+        .tooltip {
+            display: none;
+            position: absolute;
+            top: 140%;
+            left: 40%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 20px;
+            font-family: 'RixXladywatermelonR';
+            white-space: nowrap;
+        }
+
+        .text-container:hover .tooltip {
+            display: block;
+        }
+
+        .home, .right {
+            width: 80px;
+            height: auto;
+            position: absolute;
+            cursor: pointer;
+            display: none;
+        }
+
+        .home {
+            left: 10px;
+            top: 10px;
+            display: block;
+        }
+
+        .right {
+            right: 10px;
+        }
+
+        .bubble {
+            position: absolute;
+            cursor: pointer;
+            animation: floatBubble 7s linear infinite; /* 애니메이션 지속 시간 */
+        }
+
+        @keyframes floatBubble {
+            0% {
+                transform: translateX(100vw) translateY(0) scale(0.3);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateX(0vw) translateY(-10vh) scale(1.3);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100vw) translateY(-20vh) scale(0.3);
+                opacity: 0;
+            }
+        }
+
+        @keyframes moveBubble {
+            0% {
+                transform: translateX(100vw);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(10vw) scale(1);
+                opacity: 1;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="text-container" onclick="goToNextScene()">
+        <div class="text" id="instructionText">?</div>
+        <div class="tooltip">터지지 않는 비눗방울을 골라 올라타자</div>
+    </div>
+
+    <img src="아이콘_홈.png" class="home" id="homeButton">
+    <img src="아이콘_오른.png" class="right" id="rightButton">
+
+    <img src="비눗방울.png" class="bubble" id="bubble">
+
+    <script>
+        document.getElementById("homeButton").onclick = function() {
+            window.location.href = "home.html";
+        };
+
+        document.getElementById("rightButton").onclick = function() {
+            window.location.href = "8-2-Q-8.html";
+        };
+
+        const bubble = document.getElementById("bubble");
+        let clickCount = 0; // 클릭 카운트 초기화
+
+        function randomizeBubbleSizeAndPosition() {
+            const randomSize = Math.random() * 0.5 + 0.5; // scale을 0.5에서 1 사이로 랜덤 설정
+            const randomPositionY = Math.random() * 80 + 10; // 화면 높이의 10%에서 90% 사이에 위치 설정
+            bubble.style.transform = `scale(${randomSize})`; // 초기 scale 설정
+            bubble.style.top = `${randomPositionY}vh`; // Y 위치 설정
+        }
+
+        // 비눗방울 클릭 시 사라지게 하고 일정 시간 후 다시 나타나게 하는 함수
+        bubble.onclick = function() {
+            this.style.display = "none";
+            clickCount++; // 클릭 카운트 증가
+            
+            if (clickCount < 4) {
+                setTimeout(() => {
+                    randomizeBubbleSizeAndPosition(); // 크기와 위치를 랜덤화하여 다시 나타남
+                    this.style.display = "block";
+                }, 500); // 0.5초 후에 다시 나타남
+            } else {
+                // 클릭 수가 4 이상이면 더 이상 비눗방울을 나타나지 않음
+                this.style.animation = "none"; // 애니메이션 종료
+                createFinalBubble(); // 마지막 비눗방울 생성
+            }
+        };
+
+        function createFinalBubble() {
+            const finalBubble = document.createElement("img");
+            finalBubble.src = "비눗방울.png"; // 비눗방울 이미지 경로
+            finalBubble.className = "bubble";
+            finalBubble.style.animation = "moveBubble 6s forwards"; // 오른쪽에서 왼쪽으로 이동
+            finalBubble.style.position = "absolute";
+            
+            finalBubble.style.width = "100vh"; // 중앙에 위치
+            finalBubble.style.top = "10vh"; // 중앙에 위치
+            finalBubble.style.left = "50vh"; // 화면 중앙에 위치 (원하는 위치로 변경 가능)
+            finalBubble.style.transform = "scale(1)"; // 크기 고정
+            document.body.appendChild(finalBubble); // 비눗방울을 문서에 추가
+
+           // 애니메이션이 끝난 후 비눗방울을 고정하고 rightButton을 표시
+        finalBubble.addEventListener("animationend", function() {
+            finalBubble.style.animation = "none"; // 애니메이션 종료
+            document.getElementById("rightButton").style.display = "block"; // rightButton 표시
+        });
+        
+        }
+
+        randomizeBubbleSizeAndPosition(); // 페이지 로드 시 초기 비눗방울 생성
+    </script>
+
+</body>
+</html>
